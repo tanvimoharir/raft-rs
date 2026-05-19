@@ -1,0 +1,27 @@
+[package]
+name = "raft-traceforge-tests"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+publish = false
+description = "TraceForge concurrency exploration tests for tikv/raft-rs"
+
+[lib]
+name = "raft_traceforge_tests"
+path = "src/lib.rs"
+
+[dependencies]
+# TraceForge (from GitHub)
+traceforge = { git = "https://github.com/awslabs/TraceForge", version = "0.2.1" }
+
+# raft-rs (local workspace)
+raft = { path = "..", default-features = true }
+raft-proto = { path = "../proto", default-features = true }
+
+# Logging (required by raft)
+slog = "2.2"
+slog-stdlog = "4"
+slog-term = "2.4.0"
+
+[dev-dependencies]
+serial_test = "3.4.0"

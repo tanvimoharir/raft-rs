@@ -13,7 +13,7 @@ categories = ["algorithms", "database-implementations"]
 edition = "2021"
 
 [workspace]
-members = ["proto", "harness", "datadriven"]
+members = ["proto", "harness", "datadriven", "traceforge-tests"]
 
 [features]
 default = ["protobuf-codec", "default-logger"]
