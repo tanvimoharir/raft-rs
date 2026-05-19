@@ -1,4 +1,4 @@
-# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"53ac6312da150cc39c6bd885e766181709da30d9e796da34656d16e72d219687","compiler_version":"v0.68.3","strict":true,"agent_id":"claude"}
+# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"8a72d6a3ab93d150f9ce4e0f5fe447566e11ecf5e7532d77a3ab522937f25464","compiler_version":"v0.68.3","strict":true,"agent_id":"claude"}
 # gh-aw-manifest: {"version":1,"secrets":["ANTHROPIC_API_KEY","GH_AW_CI_TRIGGER_TOKEN","GH_AW_GITHUB_MCP_SERVER_TOKEN","GH_AW_GITHUB_TOKEN","GITHUB_TOKEN"],"actions":[{"repo":"actions/checkout","sha":"de0fac2e4500dabe0009e67214ff5f5447ce83dd","version":"v6.0.2"},{"repo":"actions/download-artifact","sha":"3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c","version":"v8.0.1"},{"repo":"actions/github-script","sha":"373c709c69115d41ff229c7e5df9f8788daa9553","version":"v9"},{"repo":"actions/setup-node","sha":"53b83947a5a98c8d113130e565377fae1a50d02f","version":"v6.3.0"},{"repo":"actions/upload-artifact","sha":"043fb46d1a93c77aae656e7c1c64a875d1fc6a0a","version":"v7.0.1"},{"repo":"github/gh-aw-actions/setup","sha":"ba90f2186d7ad780ec640f364005fa24e797b360","version":"v0.68.3"}],"containers":[{"image":"ghcr.io/github/gh-aw-firewall/agent:0.25.20"},{"image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.25.20"},{"image":"ghcr.io/github/gh-aw-firewall/squid:0.25.20"},{"image":"ghcr.io/github/gh-aw-mcpg:v0.2.19"},{"image":"ghcr.io/github/github-mcp-server:v0.32.0"},{"image":"node:lts-alpine"}]}
 #    ___                   _   _      
 #   / _ \                 | | (_)     
@@ -22,24 +22,9 @@
 #
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
-# TraceForge Squad: Exhaustive concurrency verification for tikv/raft-rs using
-# TraceForge's DPOR-based model checker. Each run models Raft protocol scenarios
-# as message-passing systems and verifies safety invariants across ALL possible
-# message orderings.
-# 
-# Unlike random testing, TraceForge provides a soundness guarantee: if no bug is
-# found, no bug exists (under the model assumptions).
-# 
-# Tasks:
-# 1. Research — survey raft-rs source, identify protocol scenarios to model
-# 2. Protocol Spec — extract message patterns, invariants, edge cases
-# 3. Model Writing — write TraceForge verification tests
-# 4. Verification — run tests, record execution counts
-# 5. Bug Triage — analyze violations, classify as real bugs vs model issues
-# 6. Correspondence Review — model vs actual raft-rs code mapping
-# 7. Critique — assess model coverage and gaps
-# 8. Report — findings and verification statistics
-# 9. Evidence Audit — validate all claims (MANDATORY after every phase)
+# TraceForge Squad: Exhaustive Raft protocol verification using DPOR model checking.
+# Each run models protocol scenarios as message-passing systems and verifies safety
+# invariants across ALL possible message orderings.
 #
 # Secrets used:
 #   - ANTHROPIC_API_KEY
@@ -64,7 +49,7 @@
 #   - ghcr.io/github/github-mcp-server:v0.32.0
 #   - node:lts-alpine
 
-name: "TraceForge Squad — Exhaustive Raft Protocol Verification"
+name: "TraceForge Squad — Raft Protocol Verification"
 "on":
   schedule:
   - cron: "0 */8 * * *"
@@ -81,7 +66,7 @@ permissions: {}
 concurrency:
   group: "gh-aw-${{ github.workflow }}"
 
-run-name: "TraceForge Squad — Exhaustive Raft Protocol Verification"
+run-name: "TraceForge Squad — Raft Protocol Verification"
 
 jobs:
   activation:
@@ -113,7 +98,7 @@ jobs:
           GH_AW_INFO_VERSION: "2.1.98"
           GH_AW_INFO_AGENT_VERSION: "2.1.98"
           GH_AW_INFO_CLI_VERSION: "v0.68.3"
-          GH_AW_INFO_WORKFLOW_NAME: "TraceForge Squad — Exhaustive Raft Protocol Verification"
+          GH_AW_INFO_WORKFLOW_NAME: "TraceForge Squad — Raft Protocol Verification"
           GH_AW_INFO_EXPERIMENTAL: "false"
           GH_AW_INFO_SUPPORTS_TOOLS_ALLOWLIST: "true"
           GH_AW_INFO_STAGED: "false"
@@ -183,21 +168,21 @@ jobs:
         run: |
           bash "${RUNNER_TEMP}/gh-aw/actions/create_prompt_first.sh"
           {
-          cat << 'GH_AW_PROMPT_b5230a426dc57be9_EOF'
+          cat << 'GH_AW_PROMPT_ad794fd2049d9ef9_EOF'
           <system>
-          GH_AW_PROMPT_b5230a426dc57be9_EOF
+          GH_AW_PROMPT_ad794fd2049d9ef9_EOF
           cat "${RUNNER_TEMP}/gh-aw/prompts/xpia.md"
           cat "${RUNNER_TEMP}/gh-aw/prompts/temp_folder_prompt.md"
           cat "${RUNNER_TEMP}/gh-aw/prompts/markdown.md"
           cat "${RUNNER_TEMP}/gh-aw/prompts/repo_memory_prompt.md"
           cat "${RUNNER_TEMP}/gh-aw/prompts/safe_outputs_prompt.md"
-          cat << 'GH_AW_PROMPT_b5230a426dc57be9_EOF'
+          cat << 'GH_AW_PROMPT_ad794fd2049d9ef9_EOF'
           <safe-output-tools>
           Tools: create_issue(max:4), update_issue, create_pull_request(max:2), push_to_pull_request_branch(max:4), missing_tool, missing_data, noop
-          GH_AW_PROMPT_b5230a426dc57be9_EOF
+          GH_AW_PROMPT_ad794fd2049d9ef9_EOF
           cat "${RUNNER_TEMP}/gh-aw/prompts/safe_outputs_create_pull_request.md"
           cat "${RUNNER_TEMP}/gh-aw/prompts/safe_outputs_push_to_pr_branch.md"
-          cat << 'GH_AW_PROMPT_b5230a426dc57be9_EOF'
+          cat << 'GH_AW_PROMPT_ad794fd2049d9ef9_EOF'
           </safe-output-tools>
           <github-context>
           The following GitHub context information is available for this workflow:
@@ -230,12 +215,12 @@ jobs:
             - **Note**: If a branch you need is not in the list above and is not listed as an additional fetched ref, it has NOT been checked out. For private repositories you cannot fetch it without proper authentication. If the branch is required and not available, exit with an error and ask the user to add it to the `fetch:` option of the `checkout:` configuration (e.g., `fetch: ["refs/pulls/open/*"]` for all open PR refs, or `fetch: ["main", "feature/my-branch"]` for specific branches).
           </github-context>
           
-          GH_AW_PROMPT_b5230a426dc57be9_EOF
+          GH_AW_PROMPT_ad794fd2049d9ef9_EOF
           cat "${RUNNER_TEMP}/gh-aw/prompts/github_mcp_tools_with_safeoutputs_prompt.md"
-          cat << 'GH_AW_PROMPT_b5230a426dc57be9_EOF'
+          cat << 'GH_AW_PROMPT_ad794fd2049d9ef9_EOF'
           </system>
           {{#runtime-import .github/workflows/traceforge-squad.md}}
-          GH_AW_PROMPT_b5230a426dc57be9_EOF
+          GH_AW_PROMPT_ad794fd2049d9ef9_EOF
           } > "$GH_AW_PROMPT"
       - name: Interpolate variables and render templates
         uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
@@ -368,8 +353,8 @@ jobs:
         run: bash "${RUNNER_TEMP}/gh-aw/actions/configure_gh_for_ghe.sh"
         env:
           GH_TOKEN: ${{ github.token }}
-      - name: Assess exploration state and compute task weights
-        run: "mkdir -p /tmp/tf-aw\n\nfind . -path \"*/traceforge-tests/tests/*.rs\" 2>/dev/null | wc -l > /tmp/tf-aw/test_count.txt || echo 0 > /tmp/tf-aw/test_count.txt\nfind ./src -name \"*.rs\" 2>/dev/null | wc -l > /tmp/tf-aw/src_count.txt || echo 0 > /tmp/tf-aw/src_count.txt\n[ -d \"traceforge-exploration\" ] && echo 1 > /tmp/tf-aw/explore_dir.txt || echo 0 > /tmp/tf-aw/explore_dir.txt\n[ -f \"traceforge-exploration/RESEARCH.md\" ] && echo 1 > /tmp/tf-aw/has_research.txt || echo 0 > /tmp/tf-aw/has_research.txt\n[ -f \"traceforge-exploration/TARGETS.md\" ] && echo 1 > /tmp/tf-aw/has_targets.txt || echo 0 > /tmp/tf-aw/has_targets.txt\n[ -f \"traceforge-exploration/REPORT.md\" ] && echo 1 > /tmp/tf-aw/has_report.txt || echo 0 > /tmp/tf-aw/has_report.txt\n[ -f \"traceforge-exploration/AUDIT.md\" ] && echo 1 > /tmp/tf-aw/has_audit.txt || echo 0 > /tmp/tf-aw/has_audit.txt\n[ -f \"traceforge-exploration/CRITIQUE.md\" ] && echo 1 > /tmp/tf-aw/has_critique.txt || echo 0 > /tmp/tf-aw/has_critique.txt\n[ -f \"traceforge-exploration/CORRESPONDENCE.md\" ] && echo 1 > /tmp/tf-aw/has_correspondence.txt || echo 0 > /tmp/tf-aw/has_correspondence.txt\nfind . -path \"*/traceforge-exploration/results/*.json\" 2>/dev/null | wc -l > /tmp/tf-aw/result_count.txt || echo 0 > /tmp/tf-aw/result_count.txt\n\npython3 - << 'PYEOF'\nimport json, os, random\n\ntest_count = int(open('/tmp/tf-aw/test_count.txt').read().strip() or 0)\nsrc_count = int(open('/tmp/tf-aw/src_count.txt').read().strip() or 0)\nexplore_dir = int(open('/tmp/tf-aw/explore_dir.txt').read().strip() or 0)\nhas_research = int(open('/tmp/tf-aw/has_research.txt').read().strip() or 0)\nhas_targets = int(open('/tmp/tf-aw/has_targets.txt').read().strip() or 0)\nhas_report = int(open('/tmp/tf-aw/has_report.txt').read().strip() or 0)\nhas_audit = int(open('/tmp/tf-aw/has_audit.txt').read().strip() or 0)\nhas_critique = int(open('/tmp/tf-aw/has_critique.txt').read().strip() or 0)\nhas_correspondence = int(open('/tmp/tf-aw/has_correspondence.txt').read().strip() or 0)\nresult_count = int(open('/tmp/tf-aw/result_count.txt').read().strip() or 0)\n\nhas_research_done = bool(has_research) and bool(has_targets)\nhas_specs = test_count >= 1 or bool(explore_dir)\nhas_tests = test_count >= 1\nhas_results = result_count >= 1\ntests_need_more = has_tests and test_count < 8\n\ntask_names = {\n    1: 'Research & Target Identification',\n    2: 'Protocol Spec Extraction',\n    3: 'TraceForge Model Writing',\n    4: 'Exhaustive Verification',\n    5: 'Bug Triage & Analysis',\n    6: 'Correspondence Review',\n    7: 'Model Critique',\n    8: 'Project Report',\n}\n\nweights = {\n    1: 10.0 if not has_research_done else 2.0,\n    2: (8.0 if not has_specs else 2.0) if has_research_done else 0.5,\n    3: (10.0 if tests_need_more else 4.0) if has_research_done else 0.3,\n    4: (12.0 if has_tests else 0.5),\n    5: (8.0 if has_results else 0.2),\n    6: (6.0 if not has_correspondence else 2.0) if has_tests else 0.2,\n    7: (6.0 if not has_critique else 2.0) if has_results else 0.1,\n    8: (4.0 if not has_report else 2.0) if has_results else 0.1,\n}\n\nrun_id = int(os.environ.get('GITHUB_RUN_ID', '0'))\nrng = random.Random(run_id)\nnon_main = list(weights.keys())\nnm_weights = list(weights.values())\n\nchosen, seen = [], set()\nfor t in rng.choices(non_main, weights=nm_weights, k=30):\n    if t not in seen:\n        seen.add(t)\n        chosen.append(t)\n    if len(chosen) == 4:\n        break\n\nprint('=== TraceForge Squad Task Selection ===')\nprint(f'Test files: {test_count}, Results: {result_count}')\nprint(f'Selected tasks: {chosen} = {[task_names[t] for t in chosen]}')\nprint(f'NOTE: Task 9 (Evidence Audit) + Task Final run ALWAYS after selected tasks')\n\nresult = {\n    'test_count': test_count, 'src_count': src_count,\n    'result_count': result_count,\n    'selected_tasks': chosen,\n    'task_names': {str(k): v for k, v in task_names.items()},\n}\nwith open('/tmp/tf-aw/task_selection.json', 'w') as f:\n    json.dump(result, f, indent=2)\nPYEOF"
+      - name: Assess state and select tasks
+        run: "mkdir -p /tmp/tf-aw\nfind . -path \"*/traceforge-tests/tests/*.rs\" 2>/dev/null | wc -l > /tmp/tf-aw/test_count.txt || echo 0 > /tmp/tf-aw/test_count.txt\n[ -f \"traceforge-exploration/RESEARCH.md\" ] && echo 1 > /tmp/tf-aw/has_research.txt || echo 0 > /tmp/tf-aw/has_research.txt\n[ -f \"traceforge-exploration/TARGETS.md\" ] && echo 1 > /tmp/tf-aw/has_targets.txt || echo 0 > /tmp/tf-aw/has_targets.txt\nfind . -path \"*/traceforge-exploration/results/*.json\" 2>/dev/null | wc -l > /tmp/tf-aw/result_count.txt || echo 0 > /tmp/tf-aw/result_count.txt\n\npython3 - << 'PYEOF'\nimport json, os, random\ntest_count = int(open('/tmp/tf-aw/test_count.txt').read().strip() or 0)\nhas_research = int(open('/tmp/tf-aw/has_research.txt').read().strip() or 0)\nhas_targets = int(open('/tmp/tf-aw/has_targets.txt').read().strip() or 0)\nresult_count = int(open('/tmp/tf-aw/result_count.txt').read().strip() or 0)\nhas_research_done = bool(has_research) and bool(has_targets)\nhas_tests = test_count >= 1\nhas_results = result_count >= 1\nweights = {\n    1: 10.0 if not has_research_done else 2.0,\n    2: (8.0 if has_research_done else 0.5),\n    3: (10.0 if has_research_done else 0.3),\n    4: (12.0 if has_tests else 0.5),\n    5: (8.0 if has_results else 0.2),\n    6: (4.0 if has_results else 0.1),\n}\nrun_id = int(os.environ.get('GITHUB_RUN_ID', '0'))\nrng = random.Random(run_id)\nchosen, seen = [], set()\nfor t in rng.choices(list(weights.keys()), weights=list(weights.values()), k=20):\n    if t not in seen:\n        seen.add(t)\n        chosen.append(t)\n    if len(chosen) == 3:\n        break\nnames = {1:'Research',2:'Spec',3:'Model Writing',4:'Verification',5:'Triage',6:'Report'}\nprint(f'Tasks: {[names[t] for t in chosen]}')\njson.dump({'selected_tasks':chosen,'test_count':test_count}, open('/tmp/tf-aw/task_selection.json','w'))\nPYEOF"
 
       # Repo memory git-based storage configuration from frontmatter processed below
       - name: Clone repo-memory branch (default)
@@ -434,9 +419,9 @@ jobs:
           mkdir -p "${RUNNER_TEMP}/gh-aw/safeoutputs"
           mkdir -p /tmp/gh-aw/safeoutputs
           mkdir -p /tmp/gh-aw/mcp-logs/safeoutputs
-          cat > "${RUNNER_TEMP}/gh-aw/safeoutputs/config.json" << 'GH_AW_SAFE_OUTPUTS_CONFIG_aff42f28e3b34457_EOF'
+          cat > "${RUNNER_TEMP}/gh-aw/safeoutputs/config.json" << 'GH_AW_SAFE_OUTPUTS_CONFIG_211448d6786e5837_EOF'
           {"create_issue":{"labels":["automation","traceforge-squad"],"max":4,"title_prefix":"[TraceForge Squad] "},"create_pull_request":{"draft":false,"labels":["automation","traceforge-squad"],"max":2,"max_patch_size":10240,"protected_files":["package.json","bun.lockb","bunfig.toml","deno.json","deno.jsonc","deno.lock","global.json","NuGet.Config","Directory.Packages.props","mix.exs","mix.lock","go.mod","go.sum","stack.yaml","stack.yaml.lock","pom.xml","build.gradle","build.gradle.kts","settings.gradle","settings.gradle.kts","gradle.properties","package-lock.json","yarn.lock","pnpm-lock.yaml","npm-shrinkwrap.json","requirements.txt","Pipfile","Pipfile.lock","pyproject.toml","setup.py","setup.cfg","Gemfile","Gemfile.lock","uv.lock","CODEOWNERS"],"protected_files_policy":"allowed","protected_path_prefixes":[".github/",".agents/"],"title_prefix":"[TraceForge Squad] "},"create_report_incomplete_issue":{},"missing_data":{},"missing_tool":{},"noop":{"max":1,"report-as-issue":"true"},"push_repo_memory":{"memories":[{"dir":"/tmp/gh-aw/repo-memory/default","id":"default","max_file_count":100,"max_file_size":10240,"max_patch_size":102400}]},"push_to_pull_request_branch":{"if_no_changes":"warn","max":4,"max_patch_size":10240,"protected_files":["package.json","bun.lockb","bunfig.toml","deno.json","deno.jsonc","deno.lock","global.json","NuGet.Config","Directory.Packages.props","mix.exs","mix.lock","go.mod","go.sum","stack.yaml","stack.yaml.lock","pom.xml","build.gradle","build.gradle.kts","settings.gradle","settings.gradle.kts","gradle.properties","package-lock.json","yarn.lock","pnpm-lock.yaml","npm-shrinkwrap.json","requirements.txt","Pipfile","Pipfile.lock","pyproject.toml","setup.py","setup.cfg","Gemfile","Gemfile.lock","uv.lock","CODEOWNERS"],"protected_files_policy":"allowed","protected_path_prefixes":[".github/",".agents/"],"target":"*","title_prefix":"[TraceForge Squad] "},"report_incomplete":{},"update_issue":{"allow_body":true,"max":1,"target":"*","title_prefix":"[TraceForge Squad] "}}
-          GH_AW_SAFE_OUTPUTS_CONFIG_aff42f28e3b34457_EOF
+          GH_AW_SAFE_OUTPUTS_CONFIG_211448d6786e5837_EOF
       - name: Write Safe Outputs Tools
         env:
           GH_AW_TOOLS_META_JSON: |
@@ -743,7 +728,7 @@ jobs:
           export GH_AW_ENGINE="claude"
           export MCP_GATEWAY_DOCKER_COMMAND='docker run -i --rm --network host -v /var/run/docker.sock:/var/run/docker.sock -e MCP_GATEWAY_PORT -e MCP_GATEWAY_DOMAIN -e MCP_GATEWAY_API_KEY -e MCP_GATEWAY_PAYLOAD_DIR -e MCP_GATEWAY_PAYLOAD_SIZE_THRESHOLD -e DEBUG -e MCP_GATEWAY_LOG_DIR -e GH_AW_MCP_LOG_DIR -e GH_AW_SAFE_OUTPUTS -e GH_AW_SAFE_OUTPUTS_CONFIG_PATH -e GH_AW_SAFE_OUTPUTS_TOOLS_PATH -e GH_AW_ASSETS_BRANCH -e GH_AW_ASSETS_MAX_SIZE_KB -e GH_AW_ASSETS_ALLOWED_EXTS -e DEFAULT_BRANCH -e GITHUB_MCP_SERVER_TOKEN -e GITHUB_MCP_GUARD_MIN_INTEGRITY -e GITHUB_MCP_GUARD_REPOS -e GITHUB_REPOSITORY -e GITHUB_SERVER_URL -e GITHUB_SHA -e GITHUB_WORKSPACE -e GITHUB_TOKEN -e GITHUB_RUN_ID -e GITHUB_RUN_NUMBER -e GITHUB_RUN_ATTEMPT -e GITHUB_JOB -e GITHUB_ACTION -e GITHUB_EVENT_NAME -e GITHUB_EVENT_PATH -e GITHUB_ACTOR -e GITHUB_ACTOR_ID -e GITHUB_TRIGGERING_ACTOR -e GITHUB_WORKFLOW -e GITHUB_WORKFLOW_REF -e GITHUB_WORKFLOW_SHA -e GITHUB_REF -e GITHUB_REF_NAME -e GITHUB_REF_TYPE -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e GH_AW_SAFE_OUTPUTS_PORT -e GH_AW_SAFE_OUTPUTS_API_KEY -v /tmp/gh-aw/mcp-payloads:/tmp/gh-aw/mcp-payloads:rw -v /opt:/opt:ro -v /tmp:/tmp:rw -v '"${GITHUB_WORKSPACE}"':'"${GITHUB_WORKSPACE}"':rw ghcr.io/github/gh-aw-mcpg:v0.2.19'
           
-          cat << GH_AW_MCP_CONFIG_16e3a11173cefae8_EOF | bash "${RUNNER_TEMP}/gh-aw/actions/start_mcp_gateway.sh"
+          cat << GH_AW_MCP_CONFIG_61bd880b478e9a2e_EOF | bash "${RUNNER_TEMP}/gh-aw/actions/start_mcp_gateway.sh"
           {
             "mcpServers": {
               "github": {
@@ -783,7 +768,7 @@ jobs:
               "payloadDir": "${MCP_GATEWAY_PAYLOAD_DIR}"
             }
           }
-          GH_AW_MCP_CONFIG_16e3a11173cefae8_EOF
+          GH_AW_MCP_CONFIG_61bd880b478e9a2e_EOF
       - name: Download activation artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
@@ -1088,7 +1073,7 @@ jobs:
         env:
           GH_AW_AGENT_OUTPUT: ${{ steps.setup-agent-output-env.outputs.GH_AW_AGENT_OUTPUT }}
           GH_AW_NOOP_MAX: "1"
-          GH_AW_WORKFLOW_NAME: "TraceForge Squad — Exhaustive Raft Protocol Verification"
+          GH_AW_WORKFLOW_NAME: "TraceForge Squad — Raft Protocol Verification"
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GH_AW_AGENT_CONCLUSION: ${{ needs.agent.result }}
           GH_AW_NOOP_REPORT_AS_ISSUE: "true"
@@ -1104,7 +1089,7 @@ jobs:
         uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         env:
           GH_AW_AGENT_OUTPUT: ${{ steps.setup-agent-output-env.outputs.GH_AW_AGENT_OUTPUT }}
-          GH_AW_WORKFLOW_NAME: "TraceForge Squad — Exhaustive Raft Protocol Verification"
+          GH_AW_WORKFLOW_NAME: "TraceForge Squad — Raft Protocol Verification"
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GH_AW_DETECTION_CONCLUSION: ${{ needs.detection.outputs.detection_conclusion }}
           GH_AW_DETECTION_REASON: ${{ needs.detection.outputs.detection_reason }}
@@ -1121,7 +1106,7 @@ jobs:
         env:
           GH_AW_AGENT_OUTPUT: ${{ steps.setup-agent-output-env.outputs.GH_AW_AGENT_OUTPUT }}
           GH_AW_MISSING_TOOL_CREATE_ISSUE: "true"
-          GH_AW_WORKFLOW_NAME: "TraceForge Squad — Exhaustive Raft Protocol Verification"
+          GH_AW_WORKFLOW_NAME: "TraceForge Squad — Raft Protocol Verification"
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
@@ -1135,7 +1120,7 @@ jobs:
         env:
           GH_AW_AGENT_OUTPUT: ${{ steps.setup-agent-output-env.outputs.GH_AW_AGENT_OUTPUT }}
           GH_AW_REPORT_INCOMPLETE_CREATE_ISSUE: "true"
-          GH_AW_WORKFLOW_NAME: "TraceForge Squad — Exhaustive Raft Protocol Verification"
+          GH_AW_WORKFLOW_NAME: "TraceForge Squad — Raft Protocol Verification"
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
@@ -1149,7 +1134,7 @@ jobs:
         uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         env:
           GH_AW_AGENT_OUTPUT: ${{ steps.setup-agent-output-env.outputs.GH_AW_AGENT_OUTPUT }}
-          GH_AW_WORKFLOW_NAME: "TraceForge Squad — Exhaustive Raft Protocol Verification"
+          GH_AW_WORKFLOW_NAME: "TraceForge Squad — Raft Protocol Verification"
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GH_AW_AGENT_CONCLUSION: ${{ needs.agent.result }}
           GH_AW_WORKFLOW_ID: "traceforge-squad"
@@ -1261,8 +1246,8 @@ jobs:
         if: always() && steps.detection_guard.outputs.run_detection == 'true'
         uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         env:
-          WORKFLOW_NAME: "TraceForge Squad — Exhaustive Raft Protocol Verification"
-          WORKFLOW_DESCRIPTION: "TraceForge Squad: Exhaustive concurrency verification for tikv/raft-rs using\nTraceForge's DPOR-based model checker. Each run models Raft protocol scenarios\nas message-passing systems and verifies safety invariants across ALL possible\nmessage orderings.\n\nUnlike random testing, TraceForge provides a soundness guarantee: if no bug is\nfound, no bug exists (under the model assumptions).\n\nTasks:\n1. Research — survey raft-rs source, identify protocol scenarios to model\n2. Protocol Spec — extract message patterns, invariants, edge cases\n3. Model Writing — write TraceForge verification tests\n4. Verification — run tests, record execution counts\n5. Bug Triage — analyze violations, classify as real bugs vs model issues\n6. Correspondence Review — model vs actual raft-rs code mapping\n7. Critique — assess model coverage and gaps\n8. Report — findings and verification statistics\n9. Evidence Audit — validate all claims (MANDATORY after every phase)"
+          WORKFLOW_NAME: "TraceForge Squad — Raft Protocol Verification"
+          WORKFLOW_DESCRIPTION: "TraceForge Squad: Exhaustive Raft protocol verification using DPOR model checking.\nEach run models protocol scenarios as message-passing systems and verifies safety\ninvariants across ALL possible message orderings."
           HAS_PATCH: ${{ needs.agent.outputs.has_patch }}
         with:
           script: |
@@ -1442,7 +1427,7 @@ jobs:
       GH_AW_ENGINE_MODEL: ${{ needs.agent.outputs.model }}
       GH_AW_SAFE_OUTPUT_MESSAGES: "{\"footer\":\"\\u003e Generated by 🔬 {workflow_name}, see [workflow run]({run_url}).\"}"
       GH_AW_WORKFLOW_ID: "traceforge-squad"
-      GH_AW_WORKFLOW_NAME: "TraceForge Squad — Exhaustive Raft Protocol Verification"
+      GH_AW_WORKFLOW_NAME: "TraceForge Squad — Raft Protocol Verification"
     outputs:
       code_push_failure_count: ${{ steps.process_safe_outputs.outputs.code_push_failure_count }}
       code_push_failure_errors: ${{ steps.process_safe_outputs.outputs.code_push_failure_errors }}
