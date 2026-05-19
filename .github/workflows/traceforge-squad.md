@@ -34,7 +34,6 @@ network:
 
 engine:
   id: claude
-  model: claude-sonnet-4-20250514
 
 checkout:
   fetch: ["*"]
